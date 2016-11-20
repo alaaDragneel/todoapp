@@ -29,7 +29,7 @@ class TodoListsController extends Controller
      */
     public function create()
     {
-        //
+      return view('todolists.form');
     }
 
     /**
@@ -40,7 +40,14 @@ class TodoListsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $this->validate($request,[
+        'title' => 'required|min:5',
+        'description' => 'min:5',
+      ]);
+
+      $todoList = \Auth::user()->todo()->create($request->all());
+
+      return view("todolists.item", compact('todoList'));
     }
 
     /**
