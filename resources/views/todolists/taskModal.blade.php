@@ -3,8 +3,8 @@
     <div class="modal-content">
 	 <div class="modal-header">
 	   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	   <h4 class="modal-title">Todo List</h4>
-	   <p>of <strong>To do List 1</strong></p>
+	   <h4 class="modal-title">Manage Tasks</h4>
+	   <p>of <strong id="task-modal-subtitle">To do List 1</strong></p>
 	 </div>
 	 <div class="modal-body">
 	   <div class="panel panel-default">
@@ -17,58 +17,18 @@
 				    <input type="text" placeholder="Enter New Task" class="task-input">
 				</td>
 			 </thread>
-			 <tbody>
-				<tr>
-				    <td>
-					   <input type="checkbox" class="check-item">
-				    </td>
-				    <td  class="task-item done">
-					   The first Task
-					   <div class="row-buttons">
-						  <a href="#" class="btn btn-xs btn-danger">
-							 <i class="glyphicon glyphicon-remove"></i>
-						  </a>
-					   </div>
-				    </td>
-				</tr>
-				<tr>
-				    <td>
-					   <input type="checkbox" class="check-item">
-				    </td>
-				    <td  class="task-item">
-					   The second Task
-					   <div class="row-buttons">
-						  <a href="#" class="btn btn-xs btn-danger">
-							 <i class="glyphicon glyphicon-remove"></i>
-						  </a>
-					   </div>
-				    </td>
-				</tr>
-				<tr>
-				    <td>
-					   <input type="checkbox" class="check-item">
-				    </td>
-				    <td  class="task-item">
-					   The third Task
-					   <div class="row-buttons">
-						  <a href="#" class="btn btn-xs btn-danger">
-							 <i class="glyphicon glyphicon-remove"></i>
-						  </a>
-					   </div>
-				    </td>
-				</tr>
-			 </tbody>
+			 <tbody id="tasks-table-body"></tbody>
 		  </table>
 	   </div>
 	 </div>
 	 <div class="modal-footer clearfix">
 	   <div class="pull-left">
-		  <a href="#" class="btn btn-xs btn-default active">All</a>
-		  <a href="#" class="btn btn-xs btn-default">Active</a>
-		  <a href="#" class="btn btn-xs btn-default">Completed</a>
+		  <a id="all-tasks" class="btn btn-xs btn-default fillter-btn active">All</a>
+		  <a id="active-tasks" class="btn btn-xs btn-default fillter-btn">Active</a>
+		  <a id="compeleted-tasks" class="btn btn-xs btn-default fillter-btn">Completed</a>
 	   </div>
 	   <div class="pull-right">
-		  <small>3 items left</small>
+		  <small id="active-task-counter"></small>
 	   </div>
 	 </div>
     </div><!-- /.modal-content -->

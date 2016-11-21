@@ -16,12 +16,6 @@ $(document).ready(function() {
     $('#todolist-modal').modal('show');
   });
 
-  $('.show-task-modal').click(function(event) {
-    event.preventDefault();
-
-    $('#task-modal').modal('show');
-  });
-
   function showMessage(msg){
     $('#success').text(msg).fadeTo(1000, 500).slideUp(500, function(){
       $(this).hide();
@@ -127,7 +121,33 @@ $(document).ready(function() {
       });
     });
 
-  $(function() {
+    function countActiveTasks() {
+      var total = $('tr.task-item-head:not(:has(td.done))').length;
+
+      $('#active-task-counter').text(total + ' ' + (total > 1 ? 'tasks' : 'task') + ' left');
+    }
+
+    $('body').on('click', '.show-task-modal', function(event) {
+      event.preventDefault();
+      var elm = $(this),
+        url = elm.attr('href'),
+        title = elm.data('title');
+
+        $('#task-modal-subtitle').html(title);
+
+      $.ajax({
+        url: url,
+        dataType: 'html',
+        success: function(msg) {
+          $('#tasks-table-body').html(msg);
+          initIcheck();
+          countActiveTasks();
+        },
+      });
+      $('#task-modal').modal('show');
+    });
+
+  function initIcheck(){
     $('input[type=checkbox]').iCheck({
       checkboxClass: 'icheckbox_square-green',
       increaseArea: '20%'
@@ -140,5 +160,25 @@ $(document).ready(function() {
     $('#check-all').on('ifUnchecked', function(e) {
       $('.check-item').iCheck('uncheck');
     });
+  }
+
+  $('.fillter-btn').click(function(event) {
+    event.preventDefault();
+
+    var id = this.id;
+
+    $(this).addClass('active').siblings().removeClass('active');
+
+    if (id == 'all-tasks') {
+      $('tr.task-item-head').show();
+    } else if (id == 'active-tasks') {
+      $('tr.task-item-head:has(td.done)').hide();
+      $('tr.task-item-head:not(:has(td.done))').show();
+
+    } else if (id == 'compeleted-tasks') {
+      $('tr.task-item-head:has(td.done)').show();
+      $('tr.task-item-head:not(:has(td.done))').hide();
+    }
+
   });
 });

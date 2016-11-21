@@ -17,6 +17,7 @@ class TodoListsController extends Controller
     {
          $todoLists = \Auth::user()
                     ->todo()
+                    ->with('tasks')
                     ->orderBy('updated_at', 'DESC')
                     ->get();
         return view('todolists.index', compact('todoLists'));
@@ -58,7 +59,9 @@ class TodoListsController extends Controller
      */
     public function show($id)
     {
-        //
+      $todoList = TodoList::findOrFail($id);
+      $tasks = $todoList->tasks()->orderBy('created_at', 'DESC')->get();
+      return view('tasks.index', compact('tasks'));
     }
 
     /**
