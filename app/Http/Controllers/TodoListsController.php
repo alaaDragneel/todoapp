@@ -69,7 +69,8 @@ class TodoListsController extends Controller
      */
     public function edit($id)
     {
-        //
+      $todoList = TodoList::where('id', $id)->first();
+      return view('todolists.updateform', compact('todoList'));
     }
 
     /**
@@ -81,7 +82,14 @@ class TodoListsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $this->validate($request,[
+        'title' => 'required|min:5',
+        'description' => 'min:5',
+      ]);
+
+      $todoList = \Auth::user()->todo()->findOrFail($id);
+      $todoList->update($request->all());
+      return view("todolists.item", compact('todoList'));
     }
 
     /**
@@ -92,6 +100,9 @@ class TodoListsController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $todoList = TodoList::findOrFail($id);
+      $todoList->delete();
+
+      return $todoList;
     }
 }

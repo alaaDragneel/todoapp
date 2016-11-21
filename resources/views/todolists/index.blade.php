@@ -34,7 +34,7 @@
                                @endforeach
                          </ul>
 
-                         <div class="panel-footer">
+                         <div class="panel-footer" style="background-color: #333333; color: #eee;">
                              <small><span id="todo-list-counter">{{ $count }}</span> <span>{{ $count > 1 ? 'list items' : 'list item' }}</span> </small>
                          </div>
                      </div>
@@ -43,6 +43,8 @@
                  @include('todolists.todolistModal')
 
                  @include('todolists.taskModal')
+
+                 @include('todolists.confirmModal')
              </div>
          </div>
 
