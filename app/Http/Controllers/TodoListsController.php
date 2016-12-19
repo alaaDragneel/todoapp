@@ -8,104 +8,104 @@ use App\Http\Requests;
 use App\TodoList;
 class TodoListsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-         $todoLists = \Auth::user()
-                    ->todo()
-                    ->with('tasks')
-                    ->orderBy('updated_at', 'DESC')
-                    ->get();
-        return view('todolists.index', compact('todoLists'));
-    }
+  /**
+  * Display a listing of the resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function index(Request $request)
+  {
+    $todoLists = \Auth::user()
+    ->todo()
+    ->with('tasks')
+    ->orderBy('updated_at', 'DESC')
+    ->get();
+    return view('todolists.index', compact('todoLists'));
+  }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-      return view('todolists.form');
-    }
+  /**
+  * Show the form for creating a new resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function create()
+  {
+    return view('todolists.form');
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-      $this->validate($request,[
-        'title' => 'required|min:5',
-        'description' => 'min:5',
-      ]);
+  /**
+  * Store a newly created resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  public function store(Request $request)
+  {
+    $this->validate($request,[
+      'title' => 'required|min:5',
+      'description' => 'min:5',
+    ]);
 
-      $todoList = \Auth::user()->todo()->create($request->all());
+    $todoList = \Auth::user()->todo()->create($request->all());
 
-      return view("todolists.item", compact('todoList'));
-    }
+    return view("todolists.item", compact('todoList'));
+  }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-      $todoList = TodoList::findOrFail($id);
-      $tasks = $todoList->tasks()->orderBy('created_at', 'DESC')->get();
-      return view('tasks.index', compact('tasks'));
-    }
+  /**
+  * Display the specified resource.
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function show($id)
+  {
+    $todoList = TodoList::findOrFail($id);
+    $tasks = $todoList->tasks()->orderBy('created_at', 'DESC')->get();
+    return view('tasks.index', compact('tasks'));
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-      $todoList = TodoList::where('id', $id)->first();
-      return view('todolists.updateform', compact('todoList'));
-    }
+  /**
+  * Show the form for editing the specified resource.
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function edit($id)
+  {
+    $todoList = TodoList::where('id', $id)->first();
+    return view('todolists.updateform', compact('todoList'));
+  }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-      $this->validate($request,[
-        'title' => 'required|min:5',
-        'description' => 'min:5',
-      ]);
+  /**
+  * Update the specified resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function update(Request $request, $id)
+  {
+    $this->validate($request,[
+    'title' => 'required|min:5',
+    'description' => 'min:5',
+    ]);
 
-      $todoList = \Auth::user()->todo()->findOrFail($id);
-      $todoList->update($request->all());
-      return view("todolists.item", compact('todoList'));
-    }
+    $todoList = \Auth::user()->todo()->findOrFail($id);
+    $todoList->update($request->all());
+    return view("todolists.item", compact('todoList'));
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-      $todoList = TodoList::findOrFail($id);
-      $todoList->delete();
+  /**
+  * Remove the specified resource from storage.
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function destroy($id)
+  {
+    $todoList = TodoList::findOrFail($id);
+    $todoList->delete();
 
-      return $todoList;
-    }
+    return $todoList;
+  }
 }

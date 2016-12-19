@@ -34,7 +34,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><strong>Todo</strong>App</a>
+          <a class="navbar-brand" href="{{ url('/') }}"><strong>Todo</strong>App</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -43,10 +43,10 @@
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <i class="glyphicon glyphicon-user"></i>
-                      Edomaru <span class="caret"></span>
+                      {{ Auth::user()->name }} <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Logout</a></li>
+                    <li><a href="{{ url('/logout') }}">Logout</a></li>
                   </ul>
                 </li>
               </ul>

@@ -2,7 +2,11 @@
      <h4 class="list-group-item-heading">{{ $todoList->title }} <span class="badge">{{ $todoList->tasks->count() }}</span></h4>
      <p class="list-group-item-text">{{ $todoList->description }}</p>
      <div class="buttons">
-          <a href="{{ route('todolists.show', $todoList->id) }}" class="btn btn-info show-task-modal btn-xs" data-title="{{ $todoList->title }}" title="Manage Tasks">
+          <a href="{{ route('todolists.show', $todoList->id) }}"
+               class="btn btn-info show-task-modal btn-xs"
+               data-action="{{ route('todolists.tasks.store', $todoList->id) }}"
+               data-title="{{ $todoList->title }}"
+               title="Manage Tasks">
                <i class="glyphicon glyphicon-ok"></i>
           </a>
           <a href="{{ route('todolists.edit', $todoList->id) }}" class="btn btn-default show-todolist-modal btn-xs edit" title="Edit {{ $todoList->title }}">

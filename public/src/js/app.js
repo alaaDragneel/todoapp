@@ -2,8 +2,8 @@ $(document).ready(function() {
   $('body').on('click', '.show-todolist-modal' ,function(event) {
     event.preventDefault();
     var elm = $(this),
-        url = elm.attr('href'),
-        title = elm.attr('title');
+    url = elm.attr('href'),
+    title = elm.attr('title');
     $('#todo-list-title').text(title);
     $('#todo-list-save-btn').text(elm.hasClass('edit') ? 'Update' : 'Create');
     $.ajax({
@@ -46,110 +46,165 @@ $(document).ready(function() {
   $('#todo-list-save-btn').click(function(event) {
     event.preventDefault();
     var form = $('#todo-list-body form');
-        url = form.attr('action'),
-        method = $('input[name=_method]').val() == undefined ? 'POST' : 'PUT';
-        // reset the error messages
-        form.find('.help-block').remove();
-        form.find('.has-error').removeClass('.has-error');
-        $.ajax({
-          url: url,
-          method: method,
-          data: form.serialize(),
-          success: function(msg) {
-            if (method == 'POST') {
-              $('#todo-list').prepend(msg);
-              showMessage('the todo list addedd successfully');
-              form.trigger('reset');
-              $('#title').focus();
-              updateTodoListCounter();
-            } else {
-                showMessage('the todo list updated successfully');
-              var id = $('input[name=id]').val();
-              if (id) {
-                $('#todo-list-' + id).replaceWith(msg);
-              }
-              $('.editTodolist-modal').modal('hide');
-            }
-          },
-          error: function(xhr) {
-            var errors = xhr.responseJSON;
-            if($.isEmptyObject(errors) == false) {
-              $.each(errors, function(key, value){
-                $('#' + key)
-                  .closest('.form-group')
-                  .addClass('has-error')
-                  .append("<span class='help-block'><strong>"+ value +"</strong></span>")
-              });
-            }
-          },
-        });
-    });
-
-    $('body').on('click', '.show-confirm-modal' ,function(event) {
-      event.preventDefault();
-
-      var elm = $(this),
-          title = elm.data('title'),
-          action = elm.attr('href');
-
-      $('#confirm-body form').attr('action', action);
-      $('#successDelete').show().html('are you Sure form delete <strong>'+ title +'</strong> Fucker!');
-
-      $('#confirm-modal').modal('show');
-    });
-
-    $('#confirm-remove-btn').click(function(event) {
-      event.preventDefault();
-
-      var form = $('#confirm-body form'),
-          url = form.attr('action');
-
-      $.ajax({
-        url: url,
-        method: 'DELETE',
-        data: form.serialize(),
-        success: function(msg) {
-          $('#confirm-modal').modal('hide');
-
-          $('#todo-list-' + msg.id).slideUp(500, function() {
-            $(this).remove();
-            updateTodoListCounter();
-            $('#no-record-alert').after('<div class="alert alert-success">the todolist deleted successfully</div>');
-            $('.alert-success').delay(500).slideUp(500);
+    url = form.attr('action'),
+    method = $('input[name=_method]').val() == undefined ? 'POST' : 'PUT';
+    // reset the error messages
+    form.find('.help-block').remove();
+    form.find('.has-error').removeClass('.has-error');
+    $.ajax({
+      url: url,
+      method: method,
+      data: form.serialize(),
+      success: function(msg) {
+        if (method == 'POST') {
+          $('#todo-list').prepend(msg);
+          showMessage('the todo list addedd successfully');
+          form.trigger('reset');
+          $('#title').focus();
+          updateTodoListCounter();
+        } else {
+          showMessage('the todo list updated successfully');
+          var id = $('input[name=id]').val();
+          if (id) {
+            $('#todo-list-' + id).replaceWith(msg);
+          }
+          $('.editTodolist-modal').modal('hide');
+        }
+      },
+      error: function(xhr) {
+        var errors = xhr.responseJSON;
+        if($.isEmptyObject(errors) == false) {
+          $.each(errors, function(key, value){
+            $('#' + key)
+            .closest('.form-group')
+            .addClass('has-error')
+            .append("<span class='help-block'><strong>"+ value +"</strong></span>")
           });
-        },
-      });
+        }
+      },
     });
+  });
 
-    function countActiveTasks() {
-      var total = $('tr.task-item-head:not(:has(td.done))').length;
+  $('body').on('click', '.show-confirm-modal' ,function(event) {
+    event.preventDefault();
 
-      $('#active-task-counter').text(total + ' ' + (total > 1 ? 'tasks' : 'task') + ' left');
-    }
+    var elm = $(this),
+    title = elm.data('title'),
+    action = elm.attr('href');
 
-    $('body').on('click', '.show-task-modal', function(event) {
-      event.preventDefault();
-      var elm = $(this),
-        url = elm.attr('href'),
-        title = elm.data('title');
+    $('#confirm-body form').attr('action', action);
+    $('#successDelete').show().html('are you Sure form delete <strong>'+ title +'</strong> Fucker!');
 
-        $('#task-modal-subtitle').html(title);
+    $('#confirm-modal').modal('show');
+  });
 
-      $.ajax({
-        url: url,
-        dataType: 'html',
-        success: function(msg) {
-          $('#tasks-table-body').html(msg);
-          initIcheck();
+  $('#confirm-remove-btn').click(function(event) {
+    event.preventDefault();
+
+    var form = $('#confirm-body form'),
+    url = form.attr('action');
+
+    $.ajax({
+      url: url,
+      method: 'DELETE',
+      data: form.serialize(),
+      success: function(msg) {
+        $('#confirm-modal').modal('hide');
+
+        $('#todo-list-' + msg.id).slideUp(500, function() {
+          $(this).remove();
+          updateTodoListCounter();
+          $('#no-record-alert').after('<div class="alert alert-success">the todolist deleted successfully</div>');
+          $('.alert-success').delay(500).slideUp(500);
+        });
+      },
+    });
+  });
+
+  function countActiveTasks() {
+    var total = $('tr.task-item-head:not(:has(td.done))').length;
+
+    $('#active-task-counter').text(total + ' ' + (total > 1 ? 'tasks' : 'task') + ' left');
+  }
+
+  $('body').on('click', '.show-task-modal', function(event) {
+    event.preventDefault();
+    var elm = $(this),
+    url = elm.attr('href'),
+    title = elm.data('title'),
+    action = elm.data('action'),
+    parent = elm.closest('.list-group-item')
+
+    $('#task-modal-subtitle').html(title);
+    $('#task-form').attr('action', action);
+    $('#selected-todo-list').val(parent.attr('id'));
+
+    $.ajax({
+      url: url,
+      dataType: 'html',
+      success: function(msg) {
+        $('#tasks-table-body').html(msg);
+        initIcheck();
+        countActiveTasks();
+      },
+    });
+    $('#task-modal').modal('show');
+  });
+
+  function countAllTasksOfSelectedList() {
+    var total = $('#tasks-table-body tr').length,
+    selectedTodoListId = $('#selected-todo-list').val();
+    $('#' + selectedTodoListId).find('span.badge').text(total + ' ' + (total > 1 ? 'tasks' : 'task'));
+  }
+
+  $('#task-form').submit(function (e) {
+    e.preventDefault();
+    var form = $(this),
+    action = form.attr('action');
+    $.ajax({
+      url: action,
+      method: 'POST',
+      data: form.serialize(),
+      success: function (msg) {
+        $('#tasks-table-body').prepend(msg);
+        form.trigger('reset');
+        countActiveTasks();
+        initIcheck();
+        countAllTasksOfSelectedList();
+      }
+    });
+  });
+
+  function marktheTask(checkbox) {
+    var url = checkbox.data('url'),
+    completed = checkbox.is(':checked');
+
+    $.ajax({
+      url: url,
+      method: 'PUT',
+      data: {
+        completed: completed,
+        _token: $('input[name=_token]').val(),
+      },
+      success: function(msg) {
+        if (msg) {
+          var nextId = checkbox.closest('td').next();
+
+          if (completed) {
+            nextId.addClass('done');
+          } else {
+            nextId.removeClass('done');
+          }
+
           countActiveTasks();
-        },
-      });
-      $('#task-modal').modal('show');
+        }
+      }
     });
+  }
 
   function initIcheck(){
     $('input[type=checkbox]').iCheck({
-      checkboxClass: 'icheckbox_square-green',
+      checkboxClass: 'icheckbox_flat-grey',
       increaseArea: '20%'
     });
 
@@ -159,6 +214,14 @@ $(document).ready(function() {
 
     $('#check-all').on('ifUnchecked', function(e) {
       $('.check-item').iCheck('uncheck');
+    });
+
+    $('.check-item').on('ifChecked', function (e) {
+      var checkbox = $(this);
+      marktheTask(checkbox);
+    }).on('ifUnchecked', function (e) {
+      var checkbox = $(this);
+      marktheTask(checkbox);
     });
   }
 
@@ -180,5 +243,26 @@ $(document).ready(function() {
       $('tr.task-item-head:not(:has(td.done))').hide();
     }
 
+  });
+
+  $('#tasks-table-body').on('click', '.remove-task-btn', function(e) {
+    e.preventDefault();
+
+    var url = $(this).attr('href');
+
+    $.ajax({
+      url: url,
+      method: 'DELETE',
+      data: {
+        _token: $('input[name=_token]').val(),
+      },
+      success: function (msg) {
+        $('#task-' + msg.id).fadeOut(500, function() {
+          $(this).remove();
+          countActiveTasks();
+          countAllTasksOfSelectedList();
+        });
+      }
+    });
   });
 });

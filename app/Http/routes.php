@@ -12,9 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('auth.login');
+  return view('auth.login');
 });
 
 Route::auth();
 
 Route::resource('/todolists', 'TodoListsController');
+// nested resource controller check the Route:list
+Route::resource('/todolists.tasks', 'TasksController', [
+  'only' => [ 'store', 'update', 'destroy']
+]);

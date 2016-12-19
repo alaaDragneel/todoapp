@@ -10,7 +10,7 @@ class Task extends Model
 
   public function todo()
   {
-    return $this->belongsTo(TodoList::class);
+    return $this->belongsTo(TodoList::class, 'todo_list_id');
   }
   public function getCompeletedAttribute()
   {
